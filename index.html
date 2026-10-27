@@ -155,7 +155,7 @@
     });
 
     window.addEventListener('message', event => {
-      if (event.origin !== 'https://smsvedang.github.io') return;
+      if (!event.origin.endsWith('.googleusercontent.com') && event.origin !== 'https://script.google.com') return;
       const data = event.data;
       if (!data || data.type !== 'ANTIRAGGING_SUBMIT_RESULT' || data.token !== pendingToken) return;
 
