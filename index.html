@@ -60,6 +60,9 @@
     let alreadySubmitted = false;
     let pendingToken = '';
     let callbackCounter = 0;
+    let submissionInProgress = false;
+    let submittedEnrollment = '';
+    let submittedReference = '';
 
     function showMessage(text, type) {
       $('message').textContent = text;
@@ -154,24 +157,85 @@
       lookupTimer = setTimeout(() => lookup(enrollment, version), 300);
     });
 
-    window.addEventListener('message', event => {
-      if (!event.origin.endsWith('.googleusercontent.com') && event.origin !== 'https://script.google.com') return;
-      const data = event.data;
-      if (!data || data.type !== 'ANTIRAGGING_SUBMIT_RESULT' || data.token !== pendingToken) return;
 
-      pendingToken = '';
-      $('submitBtn').disabled = false;
-      $('submitBtn').textContent = 'Submit Reference Number';
+    // Apps Script responses may be nested in a Google sandbox origin.
+    // Instead of relying on cross-origin postMessage, verify the saved value
+    // through the lookup endpoint after the hidden iframe finishes loading.
+    $('submitFrame').addEventListener('load', () => {
+      if (!submissionInProgress) return;
 
-      if (data.success) {
-        alreadySubmitted = true;
-        $('reference').readOnly = true;
+      submissionInProgress = false;
+      const enrollment = submittedEnrollment;
+      const expectedReference = submittedReference;
+      const version = ++requestVersion;
+      const callbackName = 'antiRaggingVerify' + (++callbackCounter);
+      const script = document.createElement('script');
+      let finished = false;
+
+      const timeout = setTimeout(() => {
+        cleanup();
+        $('submitBtn').disabled = false;
         updateButton();
-        showMessage(data.message || 'Reference number saved successfully. You cannot submit again.', 'success');
-      } else {
-        updateButton();
-        showMessage(data.message || 'Submission failed. Please retry.', 'error');
+        showMessage(
+          'The submission response could not be verified automatically. Refresh the form and check whether the number was saved before trying again.',
+          'error'
+        );
+      }, 15000);
+
+      function cleanup() {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timeout);
+        delete window[callbackName];
+        script.remove();
       }
+
+      window[callbackName] = result => {
+        cleanup();
+
+        if (version !== requestVersion) return;
+
+        $('submitBtn').disabled = false;
+
+        if (
+          result && result.success &&
+          result.alreadySubmitted &&
+          String(result.referenceNo || '').trim() === expectedReference
+        ) {
+          alreadySubmitted = true;
+          verifiedEnrollment = enrollment;
+          $('reference').value = result.referenceNo;
+          $('reference').readOnly = true;
+          updateButton();
+          showMessage(
+            'Reference number saved successfully. You cannot submit again.',
+            'success'
+          );
+        } else {
+          updateButton();
+          showMessage(
+            result && result.alreadySubmitted
+              ? 'A reference number is already saved for this enrollment. Please refresh and verify the saved number.'
+              : 'The submission could not be confirmed. Check the Sheet before retrying.',
+            'error'
+          );
+        }
+      };
+
+      script.onerror = () => {
+        cleanup();
+        $('submitBtn').disabled = false;
+        updateButton();
+        showMessage(
+          'The reference may have been saved, but confirmation failed. Check the Sheet before retrying.',
+          'error'
+        );
+      };
+
+      script.src = API_URL + '?action=lookup&enrollment=' +
+        encodeURIComponent(enrollment) + '&callback=' + callbackName +
+        '&_=' + Date.now();
+      document.body.appendChild(script);
     });
 
     $('studentForm').addEventListener('submit', event => {
@@ -193,6 +257,9 @@
       }
 
       pendingToken = 'submit_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      submittedEnrollment = enrollment;
+      submittedReference = reference;
+      submissionInProgress = true;
       $('submitBtn').disabled = true;
       $('submitBtn').textContent = 'Submitting...';
 
