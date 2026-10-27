@@ -1,181 +1,65 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <base target="_top">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <title>Anti-Ragging Reference Form</title>
   <style>
     * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      padding: 24px 14px;
-      font-family: Arial, sans-serif;
-      color: #18243a;
-      background: #f1f5fb;
-    }
-
-    .card {
-      max-width: 480px;
-      margin: 20px auto;
-      padding: 28px;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 10px 35px #14284b12;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 7px 11px;
-      border-radius: 20px;
-      color: #2459c4;
-      background: #e8efff;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    h2 { margin: 20px 0 8px; }
-
-    .subtitle {
-      color: #64748b;
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      margin: 17px 0 8px;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #d6deeb;
-      border-radius: 9px;
-      font-size: 15px;
-      outline: none;
-    }
-
-    input:focus { border-color: #3568d4; }
-
-    input[readonly] {
-      background: #f5f7fb;
-      color: #334155;
-    }
-
-    .hint {
-      margin-top: 7px;
-      font-size: 12px;
-      color: #64748b;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 22px;
-      padding: 14px;
-      border: 0;
-      border-radius: 10px;
-      background: #2459c4;
-      color: white;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    #message {
-      display: none;
-      margin-top: 16px;
-      padding: 12px;
-      border-radius: 9px;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .success {
-      display: block !important;
-      color: #176638;
-      background: #e7f8ed;
-    }
-
-    .error {
-      display: block !important;
-      color: #a12626;
-      background: #fff0f0;
-    }
-
-    .notice {
-      display: block !important;
-      color: #7a5200;
-      background: #fff7df;
-    }
-
-    footer {
-      margin-top: 25px;
-      text-align: center;
-      font-size: 12px;
-      color: #8490a3;
-    }
+    body { margin:0; padding:24px 14px; font-family:Arial,sans-serif; color:#18243a; background:#f1f5fb; }
+    .card { max-width:480px; margin:20px auto; padding:28px; background:#fff; border-radius:18px; box-shadow:0 10px 35px #14284b12; }
+    .tag { display:inline-block; padding:7px 11px; border-radius:20px; color:#2459c4; background:#e8efff; font-size:12px; font-weight:bold; }
+    h2 { margin:20px 0 8px; }
+    .subtitle { color:#64748b; font-size:14px; line-height:1.6; margin-bottom:25px; }
+    label { display:block; margin:17px 0 8px; font-size:14px; font-weight:600; }
+    input { width:100%; padding:13px; border:1px solid #d6deeb; border-radius:9px; font-size:15px; outline:none; }
+    input:focus { border-color:#3568d4; }
+    input[readonly] { background:#f5f7fb; color:#334155; }
+    .hint { margin-top:7px; font-size:12px; color:#64748b; }
+    button { width:100%; margin-top:22px; padding:14px; border:0; border-radius:10px; background:#2459c4; color:#fff; font-size:15px; font-weight:bold; cursor:pointer; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
+    #message { display:none; margin-top:16px; padding:12px; border-radius:9px; font-size:14px; line-height:1.5; white-space:pre-wrap; }
+    .success { display:block!important; color:#176638; background:#e7f8ed; }
+    .error { display:block!important; color:#a12626; background:#fff0f0; }
+    .notice { display:block!important; color:#7a5200; background:#fff7df; }
+    footer { margin-top:25px; text-align:center; font-size:12px; color:#8490a3; }
+    .hidden-frame { position:absolute; width:1px; height:1px; border:0; left:-9999px; }
   </style>
 </head>
-
 <body>
   <main class="card">
     <span class="tag">B.TECH BIOTECHNOLOGY</span>
-
     <h2>Anti-Ragging Number</h2>
-
-    <p class="subtitle">
-      Enter your enrollment number to verify your details,
-      then submit your actual Anti-Ragging reference number.
-      Only one submission is allowed per student.
-    </p>
-
-    <form id="form">
+    <p class="subtitle">Enter your enrollment number to verify your details, then submit your actual Anti-Ragging reference number. Only one submission is allowed per student.</p>
+    <form id="studentForm">
       <label for="enrollment">Enrollment Number</label>
-      <input id="enrollment" required maxlength="50"
-        autocomplete="off" placeholder="e.g. A20204126003">
-
+      <input id="enrollment" required maxlength="50" autocomplete="off" placeholder="e.g. A20204126003">
       <p class="hint">Your registered student details will appear automatically.</p>
-
-      <label for="name">Student Name</label>
-      <input id="name" readonly placeholder="Auto-filled">
-
+      <label for="studentName">Student Name</label>
+      <input id="studentName" readonly placeholder="Auto-filled">
       <label for="institute">Institute</label>
       <input id="institute" readonly placeholder="Auto-filled">
-
       <label for="program">Program</label>
       <input id="program" readonly placeholder="Auto-filled">
-
       <label for="reference">Anti-Ragging Number</label>
-      <input id="reference" required maxlength="150"
-        placeholder="Enter your reference number">
-
-      <button id="submitBtn" type="submit" disabled>
-        Verify enrollment first
-      </button>
+      <input id="reference" required maxlength="150" placeholder="Enter your reference number">
+      <button id="submitBtn" type="submit" disabled>Verify enrollment first</button>
     </form>
-
     <div id="message" role="status" aria-live="polite"></div>
-
     <footer>Check your details before submitting.</footer>
   </main>
 
-  <script>
-    const $ = id => document.getElementById(id);
+  <iframe name="submitFrame" id="submitFrame" class="hidden-frame" title="Submission response"></iframe>
 
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzhFcc0ywaQTfQqp_LZzG6dm7lBW7ScacysdRobxkl1KTJQyco0AVrpkgAylsNFMAga/exec";
+    const $ = id => document.getElementById(id);
     let verifiedEnrollment = '';
     let requestVersion = 0;
     let lookupTimer;
     let alreadySubmitted = false;
+    let pendingToken = '';
+    let callbackCounter = 0;
 
     function showMessage(text, type) {
       $('message').textContent = text;
@@ -184,9 +68,7 @@
 
     function updateButton() {
       const current = $('enrollment').value.trim().toUpperCase();
-      const verified = verifiedEnrollment !== '' &&
-        verifiedEnrollment === current;
-
+      const verified = verifiedEnrollment !== '' && verifiedEnrollment === current;
       if (verified && alreadySubmitted) {
         $('submitBtn').disabled = true;
         $('submitBtn').textContent = 'Already Submitted';
@@ -202,107 +84,146 @@
     function clearStudent() {
       verifiedEnrollment = '';
       alreadySubmitted = false;
-
-      $('name').value = '';
+      $('studentName').value = '';
       $('institute').value = '';
       $('program').value = '';
       $('reference').value = '';
       $('reference').readOnly = false;
-
       updateButton();
     }
 
-    $('enrollment').addEventListener('input', function () {
-      clearTimeout(lookupTimer);
+    function lookup(enrollment, version) {
+      const callbackName = 'antiRaggingLookup' + (++callbackCounter);
+      const script = document.createElement('script');
+      let finished = false;
+      const timeout = setTimeout(() => {
+        cleanup();
+        if (version === requestVersion) showMessage('Lookup timed out. Please try again.', 'error');
+      }, 15000);
 
+      function cleanup() {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timeout);
+        delete window[callbackName];
+        script.remove();
+      }
+
+      window[callbackName] = result => {
+        cleanup();
+        if (version !== requestVersion) return;
+        if (!result || !result.success) {
+          showMessage(result && result.message || 'Enrollment not found.', 'error');
+          return;
+        }
+
+        $('studentName').value = result.name || '';
+        $('institute').value = result.institute || '';
+        $('program').value = result.program || '';
+        $('reference').value = result.referenceNo || '';
+        verifiedEnrollment = enrollment;
+        alreadySubmitted = Boolean(result.alreadySubmitted);
+
+        if (alreadySubmitted) {
+          $('reference').readOnly = true;
+          showMessage('This enrollment has already submitted a reference number. Another submission is blocked. Contact your class representative for corrections.', 'notice');
+        } else {
+          $('reference').readOnly = false;
+        }
+        updateButton();
+      };
+
+      script.onerror = () => {
+        cleanup();
+        if (version === requestVersion) showMessage('Could not connect to Google Apps Script. Check the backend deployment and try again.', 'error');
+      };
+
+      script.src = API_URL + '?action=lookup&enrollment=' +
+        encodeURIComponent(enrollment) + '&callback=' + callbackName +
+        '&_=' + Date.now();
+      document.body.appendChild(script);
+    }
+
+    $('enrollment').addEventListener('input', function() {
+      clearTimeout(lookupTimer);
       const enrollment = this.value.trim().toUpperCase();
       const version = ++requestVersion;
-
       clearStudent();
       $('message').className = '';
-
       if (!enrollment) return;
-
-      lookupTimer = setTimeout(function () {
-        google.script.run
-          .withSuccessHandler(function (result) {
-            if (version !== requestVersion) return;
-
-            if (!result.success) {
-              showMessage(result.message, 'error');
-              return;
-            }
-
-            $('name').value = result.name || '';
-            $('institute').value = result.institute || '';
-            $('program').value = result.program || '';
-            $('reference').value = result.referenceNo || '';
-
-            verifiedEnrollment = enrollment;
-            alreadySubmitted = Boolean(result.alreadySubmitted);
-
-            if (alreadySubmitted) {
-              $('reference').readOnly = true;
-              showMessage(
-                'This student has already submitted. Another submission is not allowed. Contact your class representative for corrections.',
-                'notice'
-              );
-            }
-
-            updateButton();
-          })
-          .withFailureHandler(function () {
-            if (version === requestVersion) {
-              showMessage('Unable to verify enrollment. Please retry.', 'error');
-            }
-          })
-          .lookupStudent(enrollment);
-      }, 300);
+      lookupTimer = setTimeout(() => lookup(enrollment, version), 300);
     });
 
-    $('form').addEventListener('submit', function (event) {
-      event.preventDefault();
+    window.addEventListener('message', event => {
+      if (event.origin !== 'https://smsvedang.github.io') return;
+      const data = event.data;
+      if (!data || data.type !== 'ANTIRAGGING_SUBMIT_RESULT' || data.token !== pendingToken) return;
 
+      pendingToken = '';
+      $('submitBtn').disabled = false;
+      $('submitBtn').textContent = 'Submit Reference Number';
+
+      if (data.success) {
+        alreadySubmitted = true;
+        $('reference').readOnly = true;
+        updateButton();
+        showMessage(data.message || 'Reference number saved successfully. You cannot submit again.', 'success');
+      } else {
+        updateButton();
+        showMessage(data.message || 'Submission failed. Please retry.', 'error');
+      }
+    });
+
+    $('studentForm').addEventListener('submit', event => {
+      event.preventDefault();
       const enrollment = $('enrollment').value.trim().toUpperCase();
       const reference = $('reference').value.trim();
 
-      if (
-        !verifiedEnrollment ||
-        verifiedEnrollment !== enrollment ||
-        !$('name').value
-      ) {
+      if (!verifiedEnrollment || verifiedEnrollment !== enrollment || !$('studentName').value) {
         showMessage('Enter a valid enrollment number and wait for verification.', 'error');
         return;
       }
-
       if (alreadySubmitted) {
-        showMessage('You have already submitted. Another submission is blocked.', 'notice');
+        showMessage('You have already submitted. A second submission is not allowed.', 'notice');
         return;
       }
-
       if (!reference) {
         showMessage('Enter your Anti-Ragging Number.', 'error');
         return;
       }
 
+      pendingToken = 'submit_' + Date.now() + '_' + Math.random().toString(36).slice(2);
       $('submitBtn').disabled = true;
       $('submitBtn').textContent = 'Submitting...';
 
-      google.script.run
-        .withSuccessHandler(function (result) {
-          alreadySubmitted = true;
-          $('reference').readOnly = true;
-          updateButton();
-          showMessage(result.message, 'success');
-        })
-        .withFailureHandler(function (error) {
-          updateButton();
-          showMessage(
-            error.message || 'Submission failed. Please retry.',
-            'error'
-          );
-        })
-        .submitReference({ enrollment: enrollment, reference: reference });
+      const oldForm = document.getElementById('transportForm');
+      if (oldForm) oldForm.remove();
+
+      const transport = document.createElement('form');
+      transport.id = 'transportForm';
+      transport.method = 'POST';
+      transport.action = API_URL;
+      transport.target = 'submitFrame';
+
+      const fields = {
+        action: 'submit',
+        enrollment,
+        reference,
+        token: pendingToken,
+        parentOrigin: 'https://smsvedang.github.io'
+      };
+
+      Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        transport.appendChild(input);
+      });
+
+      document.body.appendChild(transport);
+      transport.submit();
+      showMessage('Submitting your reference number securely...', 'notice');
     });
   </script>
 </body>
