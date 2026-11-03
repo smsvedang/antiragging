@@ -190,6 +190,28 @@
             </div>
           </div>
 
+          <div id="manualPanel" class="reference-box field" hidden>
+            <div class="section-heading" style="margin-bottom:14px">
+              <div class="section-number">!</div>
+              <div>
+                <div class="section-title">Student not found — enter details manually</div>
+                <div class="section-desc">Check your enrollment number carefully. Your details will be added to the student sheet when you submit.</div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="manualName">Full name (as per college record)</label>
+              <input id="manualName" maxlength="120" autocomplete="name" placeholder="Enter your full name">
+            </div>
+            <div class="field">
+              <label for="manualInstitute">Institute</label>
+              <input id="manualInstitute" maxlength="180" placeholder="Enter your institute name">
+            </div>
+            <div class="field">
+              <label for="manualProgram">Program</label>
+              <input id="manualProgram" maxlength="120" value="B.Tech Biotechnology" placeholder="Enter your program">
+            </div>
+          </div>
+
           <div class="reference-box field">
             <div class="section-heading" style="margin-bottom:14px">
               <div class="section-number">02</div>
@@ -240,6 +262,7 @@
     let submissionInProgress = false;
     let submittedEnrollment = '';
     let submittedReference = '';
+    let manualMode = false;
 
     function showMessage(text, type) {
       $('message').textContent = text;
@@ -264,6 +287,11 @@
     function clearStudent() {
       verifiedEnrollment = '';
       alreadySubmitted = false;
+      manualMode = false;
+      $('manualPanel').hidden = true;
+      $('manualName').value = '';
+      $('manualInstitute').value = '';
+      $('manualProgram').value = 'B.Tech Biotechnology';
       $('studentName').value = '';
       $('institute').value = '';
       $('program').value = '';
@@ -293,10 +321,26 @@
         cleanup();
         if (version !== requestVersion) return;
         if (!result || !result.success) {
-          showMessage(result && result.message || 'Enrollment not found.', 'error');
+          const message = result && result.message || 'Enrollment not found.';
+          if (/enrollment number not found/i.test(message)) {
+            manualMode = true;
+            $('manualPanel').hidden = false;
+            $('studentName').value = '';
+            $('institute').value = '';
+            $('program').value = '';
+            verifiedEnrollment = enrollment;
+            alreadySubmitted = false;
+            $('reference').readOnly = false;
+            updateButton();
+            showMessage('Your enrollment number is not in the list. Enter your details below. They will be added to the sheet after successful submission.', 'notice');
+          } else {
+            showMessage(message, 'error');
+          }
           return;
         }
 
+        manualMode = false;
+        $('manualPanel').hidden = true;
         $('studentName').value = result.name || '';
         $('institute').value = result.institute || '';
         $('program').value = result.program || '';
@@ -420,8 +464,17 @@
       const enrollment = $('enrollment').value.trim().toUpperCase();
       const reference = $('reference').value.trim();
 
-      if (!verifiedEnrollment || verifiedEnrollment !== enrollment || !$('studentName').value) {
-        showMessage('Enter a valid enrollment number and wait for verification.', 'error');
+      if (!verifiedEnrollment || verifiedEnrollment !== enrollment) {
+        showMessage('Enter your enrollment number and wait for verification.', 'error');
+        return;
+      }
+      if (manualMode && !$('manualName').value.trim()) {
+        showMessage('Please enter your full name as per college records.', 'error');
+        $('manualName').focus();
+        return;
+      }
+      if (!manualMode && !$('studentName').value) {
+        showMessage('Please verify your enrollment number first.', 'error');
         return;
       }
       if (alreadySubmitted) {
@@ -454,7 +507,11 @@
         enrollment,
         reference,
         token: pendingToken,
-        parentOrigin: 'https://smsvedang.github.io'
+        parentOrigin: 'https://smsvedang.github.io',
+        manualMode: manualMode ? 'true' : 'false',
+        manualName: $('manualName').value.trim(),
+        manualInstitute: $('manualInstitute').value.trim(),
+        manualProgram: $('manualProgram').value.trim()
       };
 
       Object.entries(fields).forEach(([name, value]) => {
